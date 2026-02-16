@@ -1,0 +1,10 @@
+name: "BaseExample"
+description: "BaseExample description"
+settings_params:
+  - {
+      variable: enabled,
+      name: "Включено",
+      options: [{ name: "Нет", value: 0 }, { name: "Да", value: 1 }],
+    }
+  - { variable: string_param, name: "Строка" }
+version: 2.1
