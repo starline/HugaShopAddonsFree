@@ -28,19 +28,20 @@
  * 
  */
 
-namespace HugaShop\Addons\BaseExample\Command;
+namespace HugaShop\Addons\CronAgent\Command;
 
-use Symfony\Component\Lock\LockFactory;
-use HugaShop\Addons\BaseExample\BaseExample;
-use Symfony\Component\Lock\Store\FlockStore;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Style\SymfonyStyle;
+use HugaShop\Addons\CronAgent\CronAgent;
+use HugaShop\Addons\CronAgent\Services\CronAgentService;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Lock\LockFactory;
+use Symfony\Component\Lock\Store\FlockStore;
 
 #[AsCommand(name: 'cron:agents', description: 'Run Cron agents.')]
-final class BaseExampleCommand extends Command
+final class CronAgentCommand extends Command
 {
 
     /**
@@ -64,7 +65,7 @@ final class BaseExampleCommand extends Command
         try {
 
             // 2) Проверка включения аддона и настройки
-            if (!BaseExample::isEnabled()) {
+            if (!CronAgent::isEnabled() || !CronAgent::getSettings('use_cron')) {
                 $io->note('CronAgent addon is disabled or not configured for cron.');
                 return Command::FAILURE;
             }
@@ -72,7 +73,7 @@ final class BaseExampleCommand extends Command
             // 3) Запуск агентов
             $io->text('Running agents...');
 
-            // Do somthing ....
+            CronAgentService::run();
 
             $io->success('Agents executed successfully.');
             return Command::SUCCESS;
